@@ -3,7 +3,6 @@ import { headers, url } from '../headers';
 
 export const updateUser = async (user: User) => {
 
-    console.log('user', user)
     const userWithJsonDatos = {
         ...user,
         datos : JSON.stringify(user.datos),
