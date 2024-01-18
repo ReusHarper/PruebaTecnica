@@ -24,6 +24,7 @@ Para las solicitudes a la API, se deben agregar los siguientes headers:
          : "api.devdicio.net",
     "xc-token"     : "J38b4XQNLErVatKIh4oP1jw9e_wYWkS86Y04TMNP"
 }
+```
 
 La aplicación tendrá 2 secciones principales:
 
