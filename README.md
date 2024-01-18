@@ -17,13 +17,10 @@ Para las solicitudes a la API, se deben agregar los siguientes headers:
 ```json
 {
     "Content-Type" : "application/json",
-    "Host
-
-"
-
-         : "api.devdicio.net",
+    "Host"         : "api.devdicio.net",
     "xc-token"     : "J38b4XQNLErVatKIh4oP1jw9e_wYWkS86Y04TMNP"
 }
+```
 
 La aplicación tendrá 2 secciones principales:
 
