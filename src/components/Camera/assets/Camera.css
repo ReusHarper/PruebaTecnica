@@ -1,0 +1,12 @@
+.card {
+    border: none !important;
+}
+
+.container {
+    /* max-height    : 35rem !important; */
+    padding       : 0 !important;
+    border        : solid gray 0.05rem !important;
+    border-radius : 0.5rem !important;
+    display       : flex;
+    align-items   : flex-end;
+}
