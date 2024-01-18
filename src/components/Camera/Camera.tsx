@@ -17,7 +17,6 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
 
     // ***** Functions ***** //
     const startCamera = () => {
-        console.log('startCamera');
         navigator.mediaDevices
         .getUserMedia({
             video : { width : 300, height : 300 }

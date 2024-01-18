@@ -17,12 +17,9 @@ const UsersDashboard = () => {
     const users = getUserAll();
     
     // ***** Functions ***** //
-    // console.log('user: ', getUser(33));
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     }
-
-    console.log('search: ', search);
 
     // ***** JSX ***** //
     return (

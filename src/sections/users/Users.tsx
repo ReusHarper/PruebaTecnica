@@ -116,8 +116,6 @@ const Users = () => {
     useEffect(() => {
         const filled = Object.values(formUserContactDataValues).every(value => value !== null && value !== '') && Object.values(formUserValues).every(value => value !== null && value !== '');
         setAllInputsFilled(filled);
-        console.log('filled: ', filled);
-        console.log('formUserValues: ', formUserValues);
     }, [userSelected, formUserContactDataValues, formUserValues, photoBase64]);
 
     // ***** Functions ***** //
