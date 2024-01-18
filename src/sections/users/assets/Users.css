@@ -1,0 +1,36 @@
+button {
+    border: none !important;
+}
+
+.cursor-pointer {
+    cursor : pointer !important;
+}
+
+.cursor-default {
+    cursor : default !important;
+}
+
+.bg-color-primary:hover {
+    background-color : #f4cc54 !important;
+    color            : #000 !important;
+    border           : none !important;
+}
+
+.bg-color-secondary:hover {
+    background-color : #f85127 !important;
+    color            : #fff !important;
+    border           : none !important;
+}
+
+.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color   : rgba(140, 136, 136, 0.5) !important;
+    opacity : 0.75;    /* Firefox */
+}
+
+.form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color : rgba(140, 136, 136, 0.5) !important;
+}
+
+.form-control::-ms-input-placeholder { /* Microsoft Edge */
+    color : rgba(140, 136, 136, 0.5) !important;
+}
