@@ -1,0 +1,34 @@
+.scroll-container {
+    overflow-x  : auto;
+    white-space : nowrap;
+    display     : flex;
+}
+
+.column {
+    min-width: 200px;
+}
+
+.max-width-5rem {
+    width         : 100%;
+    max-width     : 5rem;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+    white-space   : nowrap;
+}
+
+.max-width-50rem {
+    width         : 100%;
+    max-width     : 50rem;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+    white-space   : nowrap;
+}
+
+@media screen and (max-width: 767px) {
+    .scroll-container {
+        display : block;
+    }
+    .column {
+        display : inline-block;
+    }
+}
