@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button, Card, Container } from 'react-bootstrap';
 import { FaCamera, FaRegWindowClose } from 'react-icons/fa';
 import './assets/Camera.css';
+import ToastAlert from '../ToasAlert/ToastAlert';
 
 interface CameraProps {
     setPhotoBase64 : (value: string) => void;
@@ -13,7 +14,8 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
     const photoDiv = useRef<HTMLCanvasElement>(null);
 
     // ***** States ***** //
-    const [stream, setStream] = useState<MediaStream | null>(null);
+    const [stream, setStream]         = useState<MediaStream | null>(null);
+    const [isCameraOn, setIsCameraOn] = useState(false);
 
     // ***** Functions ***** //
     const startCamera = () => {
@@ -28,12 +30,26 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
                 video.srcObject = stream;
                 video.play();
             }
+            setIsCameraOn(true);
         }).catch(err => {
             console.log(err)
         })
     }
 
+    useEffect( () => {
+        startCamera();
+        checkCameraPermissions();
+
+        return () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        }
+    }, [])
+
     const getPhoto = () => {
+        startCamera();
+
         const width  = 300;
         const height = 300;
         
@@ -67,6 +83,22 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
         }
     }
 
+    const checkCameraPermissions = async() => {
+        try {
+            const cameraPermissionStatus = await navigator.permissions.query({ name: 'camera' });
+
+            // Verified
+            if (cameraPermissionStatus.state !== 'granted'){
+                <ToastAlert
+                    title = 'Permisos denegados'
+                    body = 'No cuentas con los permisos de la Camara, por favor activalos'
+                />
+            }
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
     // ***** JSX ***** //
     return (
         <div className = 'd-flex justify-content-center'>
@@ -75,9 +107,9 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
                     <Card className = 'col-sm-12 col-md-6 card'>
                         <video ref = { videoDiv } style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></video>
                         <Card className = 'row gap-2'>
-                            <Button onClick={ startCamera }>
+                            {/* <Button onClick={ startCamera }>
                                 Encender cámara
-                            </Button>
+                            </Button> */}
                             <Button onClick={ getPhoto }>
                                 <FaCamera />Tomar foto
                             </Button>
