@@ -11,7 +11,7 @@ export interface UserContactData {
 
 const regexUserContactData = {
     expression: {
-        calle        : /^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+$/,
+        calle        : /^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+|\d+(\.\d+)?$/,
         numero       : /^[0-9]+$/,
         colonia      : /^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+$/,
         delegacion   : /^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+$/,
