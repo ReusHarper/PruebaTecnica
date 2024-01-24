@@ -9,6 +9,7 @@ import { UserContactData } from '../../modules/users/domain/UserContactData';
 import { User } from '../../modules/users/domain/User';
 import { getUser } from '../../modules/users/application/getUser/getUser';
 import { createUser } from '../../modules/users/application/createUser/createUser';
+import { updateUser } from '../../modules/users/application/updateUser/updateUser';
 import { useForm } from '../../hooks/useForm';
 import { useResetForm } from '../../hooks/useResetForm';
 import FieldForm from './components/FieldForm';
@@ -17,7 +18,6 @@ import Button from 'react-bootstrap/Button';
 import Camera from '../../components/Camera/Camera';
 import ToastAlert from '../../components/ToasAlert/ToastAlert';
 import './assets/Users.css';
-import { updateUser } from '../../modules/users/application/updateUser/updateUser';
 
 const Users = () => {
     // ***** Constants & Variables ***** //
@@ -79,32 +79,38 @@ const Users = () => {
     useEffect(() => {
         // const { calle, numero, colonia, delegacion, estado, imagen, cp, codigoPostal, ...userValues } = formValuesResponse;
         const { nombre, apellidoPaterno, apellidoMaterno, edad, email, fechaNac, calle, numero, colonia, delegacion, estado, imagen, cp, codigoPostal } = formValuesResponse;
-        const userContactDataValues: UserContactData = {
-            calle        : typeof calle        === 'string' ? calle          : '',
-            numero       : typeof numero       === 'string' ? numero         : '',
-            colonia      : typeof colonia      === 'string' ? colonia        : '',
-            delegacion   : typeof delegacion   === 'string' ? delegacion     : '',
-            estado       : typeof estado       === 'string' ? estado         : '',
-            imagen       : typeof imagen       === 'string' ? imagen         : '',
-            cp           : typeof cp           === 'string' ? cp             : '',
-            codigoPostal : typeof codigoPostal === 'number' ? codigoPostal   : 0,
-        };
+        
+        if (userSelected === null) {
+            const userContactDataValues: UserContactData = {
+                calle        : typeof calle        === 'string' ? calle          : '',
+                numero       : typeof numero       === 'string' ? numero         : '',
+                colonia      : typeof colonia      === 'string' ? colonia        : '',
+                delegacion   : typeof delegacion   === 'string' ? delegacion     : '',
+                estado       : typeof estado       === 'string' ? estado         : '',
+                imagen       : typeof imagen       === 'string' ? imagen         : '',
+                cp           : typeof cp           === 'string' ? cp             : '',
+                codigoPostal : typeof codigoPostal === 'number' ? codigoPostal   : 0,
+            };
 
-        const userValues: User = {
-            nombre          : typeof nombre          === 'string' ? nombre          : '',
-            apellidoPaterno : typeof apellidoPaterno === 'string' ? apellidoPaterno : '',
-            apellidoMaterno : typeof apellidoMaterno === 'string' ? apellidoMaterno : '',
-            edad            : typeof edad            === 'number' ? edad            : 0,
-            email           : typeof email           === 'string' ? email           : '',
-            fechaNac        : typeof fechaNac        === 'string' ? fechaNac        : '',
-            datos           : { ...userContactDataValues }
-        };
+            const userValues: User = {
+                nombre          : typeof nombre          === 'string' ? nombre          : '',
+                apellidoPaterno : typeof apellidoPaterno === 'string' ? apellidoPaterno : '',
+                apellidoMaterno : typeof apellidoMaterno === 'string' ? apellidoMaterno : '',
+                edad            : typeof edad            === 'number' ? edad            : 0,
+                email           : typeof email           === 'string' ? email           : '',
+                fechaNac        : typeof fechaNac        === 'string' ? fechaNac        : '',
+                datos           : { ...userContactDataValues }
+            };
 
-        if (photoBase64 !== '') { userContactDataValues.imagen = photoBase64; }
-        userContactDataValues.codigoPostal = Number(userContactDataValues.cp);
+            if (photoBase64 !== '') { userContactDataValues.imagen = photoBase64; }
+            userContactDataValues.codigoPostal = Number(userContactDataValues.cp);
 
-        setFormUserContactDataValues(userContactDataValues);
-        setFormUserValues(userValues);
+            setFormUserContactDataValues(userContactDataValues);
+            setFormUserValues(userValues);
+        } else {
+            setFormUserContactDataValues({ ...userSelected.datos! });
+            setFormUserValues( prevUser => ({...prevUser, data: userSelected.datos}));
+        }
     }, [formValuesResponse]);
 
     useEffect(() => {
@@ -129,7 +135,8 @@ const Users = () => {
             if (userSelected) {
                 response = await updateUser(formUserValues);
             } else {
-                response = await createUser(formUserValues);
+                console.log('formValues', formUserValues)
+                response = await createUser({...formUserValues });
             }
 
             if (response.error) {

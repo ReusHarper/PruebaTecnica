@@ -1,7 +1,14 @@
 import { User } from '../../domain/User';
 import { headers, url } from '../headers';
 
-export const createUser = async (user: User) => {
+export const createUser = async (user: User, imagen ?: string) => {
+    console.log('user: ', user)
+    const newDatos = user.datos
+    const newUser = user
+
+    // newDatos.imagen = imagen !== null ? imagen : newDatos!.imagen
+    newUser.datos = newDatos;
+
     const userWithJsonDatos = {
         ...user,
         datos : JSON.stringify(user.datos),
