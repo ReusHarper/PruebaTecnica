@@ -36,18 +36,11 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
         })
     }
 
-    useEffect( () => {
-        startCamera();
-        checkCameraPermissions().then(alertElement => {
-            setAlert(alertElement);
-        });
-
-        return () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+    const stopCamera = () => {  
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
         }
-    }, [])
+    }
 
     const getPhoto = () => {
         startCamera();
@@ -70,9 +63,7 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
             setPhotoBase64(base64Image);
 
             // Stop the camera
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+            stopCamera();
         }
     }
 
@@ -104,32 +95,40 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
         return <></>
     }
 
+    // ***** Effects ***** //
+    useEffect( () => {
+        startCamera();
+        checkCameraPermissions().then(alertElement => {
+            setAlert(alertElement);
+        });
+
+        return () => stopCamera();
+    }, []);
+
     // ***** JSX ***** //
     return (
         <div>
             <div className = 'd-flex justify-content-center'>
                 <Container className = 'mb-5 row container align-items-center'>
-                    {/* <Row> */}
-                        <Card className = 'col-sm-12 col-md-6 card'>
-                            <video ref = { videoDiv } style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></video>
-                            <Card className = 'row gap-2'>
-                                {/* <Button onClick={ startCamera }>
-                                    Encender cámara
-                                </Button> */}
-                                <Button onClick={ getPhoto }>
-                                    <FaCamera />Tomar foto
-                                </Button>
-                            </Card>
+                    <Card className = 'col-sm-12 col-md-6 card'>
+                        <video ref = { videoDiv } style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></video>
+                        <Card className = 'row gap-2'>
+                            {/* <Button onClick={ startCamera }>
+                                Encender cámara
+                            </Button> */}
+                            <Button onClick={ getPhoto }>
+                                <FaCamera />Tomar foto
+                            </Button>
                         </Card>
-                        <Card className = 'col-sm-12 col-md-6 card py-4'>
-                            <canvas ref = { photoDiv }  style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></canvas>
-                            <Card className = 'bg-danger'>
-                                <Button color='red' onClick={ closePhoto }>
-                                    <FaRegWindowClose /> Cerrar
-                                </Button>
-                            </Card>
+                    </Card>
+                    <Card className = 'col-sm-12 col-md-6 card py-4'>
+                        <canvas ref = { photoDiv }  style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></canvas>
+                        <Card className = 'bg-danger'>
+                            <Button color='red' onClick={ closePhoto }>
+                                <FaRegWindowClose /> Cerrar
+                            </Button>
                         </Card>
-                    {/* </Row> */}
+                    </Card>
                 </Container>
                 
             </div>
