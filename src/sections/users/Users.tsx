@@ -77,7 +77,6 @@ const Users = () => {
     }, [userSelected]);
 
     useEffect(() => {
-        // const { calle, numero, colonia, delegacion, estado, imagen, cp, codigoPostal, ...userValues } = formValuesResponse;
         const { nombre, apellidoPaterno, apellidoMaterno, edad, email, fechaNac, calle, numero, colonia, delegacion, estado, imagen, cp, codigoPostal } = formValuesResponse;
         
         if (userSelected === null) {
@@ -135,8 +134,7 @@ const Users = () => {
             if (userSelected) {
                 response = await updateUser(formUserValues);
             } else {
-                console.log('formValues', formUserValues)
-                response = await createUser({...formUserValues });
+                response = await createUser({...formUserValues }, photoBase64);
             }
 
             if (response.error) {
