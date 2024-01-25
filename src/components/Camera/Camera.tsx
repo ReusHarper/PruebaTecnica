@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react'
 import { Button, Card, Container } from 'react-bootstrap';
 import { FaCamera, FaRegWindowClose } from 'react-icons/fa';
@@ -14,8 +15,8 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
     const photoDiv = useRef<HTMLCanvasElement>(null);
 
     // ***** States ***** //
-    const [stream, setStream]         = useState<MediaStream | null>(null);
-    const [isCameraOn, setIsCameraOn] = useState(false);
+    const [stream, setStream] = useState<MediaStream | null>(null);
+    const [alert, setAlert]   = useState<JSX.Element | null>(null);
 
     // ***** Functions ***** //
     const startCamera = () => {
@@ -30,22 +31,16 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
                 video.srcObject = stream;
                 video.play();
             }
-            setIsCameraOn(true);
         }).catch(err => {
             console.log(err)
         })
     }
 
-    useEffect( () => {
-        startCamera();
-        checkCameraPermissions();
-
-        return () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+    const stopCamera = () => {  
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
         }
-    }, [])
+    }
 
     const getPhoto = () => {
         startCamera();
@@ -68,9 +63,7 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
             setPhotoBase64(base64Image);
 
             // Stop the camera
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+            stopCamera();
         }
     }
 
@@ -83,27 +76,40 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
         }
     }
 
-    const checkCameraPermissions = async() => {
+    const checkCameraPermissions = async() : Promise<JSX.Element> => {
         try {
-            const cameraPermissionStatus = await navigator.permissions.query({ name: 'camera' });
-
+            const cameraPermissionStatus = await navigator.permissions.query({ name: 'camera' as PermissionName });
+            console.log('cameraPermissionStatus.state: ', cameraPermissionStatus.state);
             // Verified
-            if (cameraPermissionStatus.state !== 'granted'){
-                <ToastAlert
-                    title = 'Permisos denegados'
-                    body = 'No cuentas con los permisos de la Camara, por favor activalos'
-                />
+            if (cameraPermissionStatus.state === 'denied'){
+                return (
+                    <ToastAlert
+                        title = 'Permisos denegados'
+                        body = 'No cuentas con los permisos de la Camara, por favor activalos'
+                    />
+                );
             }
         } catch(error) {
             console.error(error);
         }
+        return <></>
     }
+
+    // ***** Effects ***** //
+    useEffect( () => {
+        startCamera();
+        checkCameraPermissions().then(alertElement => {
+            setAlert(alertElement);
+        });
+
+        return () => stopCamera();
+    }, []);
 
     // ***** JSX ***** //
     return (
-        <div className = 'd-flex justify-content-center'>
-            <Container className = 'mb-5 row container align-items-center'>
-                {/* <Row> */}
+        <div>
+            <div className = 'd-flex justify-content-center'>
+                <Container className = 'mb-5 row container align-items-center'>
                     <Card className = 'col-sm-12 col-md-6 card'>
                         <video ref = { videoDiv } style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></video>
                         <Card className = 'row gap-2'>
@@ -123,8 +129,10 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
                             </Button>
                         </Card>
                     </Card>
-                {/* </Row> */}
-            </Container>
+                </Container>
+                
+            </div>
+            { alert }
         </div>
     );
 }

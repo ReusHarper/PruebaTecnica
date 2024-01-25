@@ -77,7 +77,6 @@ const Users = () => {
     }, [userSelected]);
 
     useEffect(() => {
-        // const { calle, numero, colonia, delegacion, estado, imagen, cp, codigoPostal, ...userValues } = formValuesResponse;
         const { nombre, apellidoPaterno, apellidoMaterno, edad, email, fechaNac, calle, numero, colonia, delegacion, estado, imagen, cp, codigoPostal } = formValuesResponse;
         
         if (userSelected === null) {
@@ -135,8 +134,7 @@ const Users = () => {
             if (userSelected) {
                 response = await updateUser(formUserValues);
             } else {
-                console.log('formValues', formUserValues)
-                response = await createUser({...formUserValues });
+                response = await createUser({...formUserValues }, photoBase64);
             }
 
             if (response.error) {
@@ -174,6 +172,7 @@ const Users = () => {
                                     placeholder  = { UserForm.Placeholders[key as UserFormField] }
                                     warning      = { UserForm.Warning[key as UserFormField] }
                                     type         = { UserForm.Type[key as UserFormField] }
+                                    name         = { UserForm.Name[key as UserFormField] }
                                     handleChange = { (event) => handleChange(event, key) }
                                     value        = { userSelected ? userSelected[key as UserFormField] : undefined }
                                 />
@@ -194,6 +193,7 @@ const Users = () => {
                                     placeholder  = { UserContactDataForm.Placeholders[key as UserContactDataFormField] }
                                     warning      = { UserContactDataForm.Warning[key as UserContactDataFormField] }
                                     type         = { UserContactDataForm.Type[key as UserContactDataFormField] }
+                                    name         = { UserContactDataForm.Name[key as UserContactDataFormField] }
                                     handleChange = { (event) => handleChange(event, key) }
                                     value        = { userSelected && userSelected.datos ? userSelected.datos[key as UserContactDataFormField] : undefined }
                                 />

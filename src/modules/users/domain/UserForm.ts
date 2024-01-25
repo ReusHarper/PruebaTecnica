@@ -43,6 +43,15 @@ export const UserForm = {
         [UserFormField.EMAIL]      : 'email',
         [UserFormField.FEC_NAC]    : 'date',
     } as const,
+
+    Name: {
+        [UserFormField.NOMBRE]     : 'nombre',
+        [UserFormField.AP_PATERNO] : 'apellidoPaterno',
+        [UserFormField.AP_MATERNO] : 'apellidoMaterno',
+        [UserFormField.EDAD]       : 'edad',
+        [UserFormField.EMAIL]      : 'email',
+        [UserFormField.FEC_NAC]    : 'fechaNac',
+    } as const,
 } as const;
 
 export const UserFormButton = {

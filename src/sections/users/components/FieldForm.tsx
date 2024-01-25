@@ -10,18 +10,19 @@ interface FieldFormProps {
     placeholder  : string;
     warning      : string;
     type         : string;
+    name         : string;
     value       ?: string | number | null;
     handleChange : (event : ChangeEvent<HTMLInputElement>, type : string ) => void;
 }
 
-const FieldForm =  ({ id, label, placeholder, warning, type, value, handleChange } : FieldFormProps) => {
+const FieldForm =  ({ id, label, placeholder, warning, type, name, value, handleChange } : FieldFormProps) => {
 
     const [inputValue, setInputValue] = useState('');
     const [isValid, setIsValid]       = useState(true);
 
-    const handleLocalChange = (event : ChangeEvent<HTMLInputElement>, type : string ) => {
+    const handleLocalChange = (event : ChangeEvent<HTMLInputElement>, type : string, name : string ) => {
         setInputValue(event.target.value);
-        setIsValid(UserNotValidError(event.target.value, type) || DataNotValidError(event.target.value, type));
+        setIsValid(UserNotValidError(event.target.value, name) || DataNotValidError(event.target.value, name));
         handleChange(event, type);
     };
 
@@ -32,7 +33,7 @@ const FieldForm =  ({ id, label, placeholder, warning, type, value, handleChange
                 type        = { type }
                 placeholder = { placeholder }
                 value       = { inputValue || value || '' }
-                onChange    = { (e : ChangeEvent<HTMLInputElement>) => handleLocalChange(e, type) }
+                onChange    = { (e : ChangeEvent<HTMLInputElement>) => handleLocalChange(e, type, name) }
                 isInvalid   = { !isValid }
                 max         = { type === 'date' ? new Date().toISOString().split('T')[0]: undefined }
             />

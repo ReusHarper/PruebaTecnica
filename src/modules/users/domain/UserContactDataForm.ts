@@ -43,4 +43,13 @@ export const UserContactDataForm = {
         [UserContactDataFormField.ESTADO]     : 'string',
         [UserContactDataFormField.CP]         : 'number',
     } as const,
+
+    Name: {
+        [UserContactDataFormField.CALLE]      : 'calle',
+        [UserContactDataFormField.NUMERO]     : 'numero',
+        [UserContactDataFormField.COLONIA]    : 'colonia',
+        [UserContactDataFormField.DELEGACION] : 'delegacion',
+        [UserContactDataFormField.ESTADO]     : 'estado',
+        [UserContactDataFormField.CP]         : 'codigoPostal',
+    } as const,
 } as const;
