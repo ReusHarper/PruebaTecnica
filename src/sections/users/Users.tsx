@@ -174,6 +174,7 @@ const Users = () => {
                                     placeholder  = { UserForm.Placeholders[key as UserFormField] }
                                     warning      = { UserForm.Warning[key as UserFormField] }
                                     type         = { UserForm.Type[key as UserFormField] }
+                                    name         = { UserForm.Name[key as UserFormField] }
                                     handleChange = { (event) => handleChange(event, key) }
                                     value        = { userSelected ? userSelected[key as UserFormField] : undefined }
                                 />
@@ -194,6 +195,7 @@ const Users = () => {
                                     placeholder  = { UserContactDataForm.Placeholders[key as UserContactDataFormField] }
                                     warning      = { UserContactDataForm.Warning[key as UserContactDataFormField] }
                                     type         = { UserContactDataForm.Type[key as UserContactDataFormField] }
+                                    name         = { UserContactDataForm.Name[key as UserContactDataFormField] }
                                     handleChange = { (event) => handleChange(event, key) }
                                     value        = { userSelected && userSelected.datos ? userSelected.datos[key as UserContactDataFormField] : undefined }
                                 />

@@ -28,19 +28,29 @@ const regexUser = {
         email           : 'email',
         fechaNac        : 'date',
     } as const,
+    name: {
+        nombre          : 'nombre',
+        apellidoPaterno : 'apellidoPaterno',
+        apellidoMaterno : 'apellidoMaterno',
+        edad            : 'edad',
+        email           : 'email',
+        fechaNac        : 'fechaNac',
+    } as const,
 } as const;
 
-export const UserNotValidError = (value : string, type : string) => {
-    switch (type) {
-        case regexUser.type.email:
-            return regexUser.expression.email.test(value);
-        case regexUser.type.nombre:
+export const UserNotValidError = (value : string, name : string) => {
+    switch (name) {
+        case regexUser.name.nombre:
             return regexUser.expression.nombre.test(value);
-        case regexUser.type.apellidoPaterno:
+        case regexUser.name.apellidoPaterno:
             return regexUser.expression.apellidoPaterno.test(value);
-        case regexUser.type.apellidoMaterno:
+        case regexUser.name.apellidoMaterno:
             return regexUser.expression.apellidoMaterno.test(value);
-        case regexUser.type.fechaNac:
+        case regexUser.name.edad:
+            return regexUser.expression.edad.test(value);
+        case regexUser.name.email:
+            return regexUser.expression.email.test(value);
+        case regexUser.name.fechaNac:
             return true;
         default:
             return false;
