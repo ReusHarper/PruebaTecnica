@@ -19,7 +19,7 @@ const ToastAlert = ({ title, body } : ToastAlertProps) => {
     }, []);
 
     return (
-        <Toast show = {showToast} onClose = { () => setShowToast(false) }>
+        <Toast show = {showToast} onClose = { () => setShowToast(false) }  className = 'bg-danger'>
             <Toast.Header>
                 <strong className = 'me-auto'>{ title }</strong>
             </Toast.Header>

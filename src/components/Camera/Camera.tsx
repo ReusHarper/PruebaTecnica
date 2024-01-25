@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react'
 import { Button, Card, Container } from 'react-bootstrap';
 import { FaCamera, FaRegWindowClose } from 'react-icons/fa';
@@ -14,8 +15,8 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
     const photoDiv = useRef<HTMLCanvasElement>(null);
 
     // ***** States ***** //
-    const [stream, setStream]         = useState<MediaStream | null>(null);
-    const [isCameraOn, setIsCameraOn] = useState(false);
+    const [stream, setStream] = useState<MediaStream | null>(null);
+    const [alert, setAlert]   = useState<JSX.Element | null>(null);
 
     // ***** Functions ***** //
     const startCamera = () => {
@@ -30,7 +31,6 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
                 video.srcObject = stream;
                 video.play();
             }
-            setIsCameraOn(true);
         }).catch(err => {
             console.log(err)
         })
@@ -38,7 +38,9 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
 
     useEffect( () => {
         startCamera();
-        checkCameraPermissions();
+        checkCameraPermissions().then(alertElement => {
+            setAlert(alertElement);
+        });
 
         return () => {
             if (stream) {
@@ -83,48 +85,55 @@ const Camera = ({ setPhotoBase64 } : CameraProps) => {
         }
     }
 
-    const checkCameraPermissions = async() => {
+    const checkCameraPermissions = async() : Promise<JSX.Element> => {
         try {
-            const cameraPermissionStatus = await navigator.permissions.query({ name: 'camera' });
-
+            const cameraPermissionStatus = await navigator.permissions.query({ name: 'camera' as PermissionName });
+            console.log('cameraPermissionStatus.state: ', cameraPermissionStatus.state);
             // Verified
-            if (cameraPermissionStatus.state !== 'granted'){
-                <ToastAlert
-                    title = 'Permisos denegados'
-                    body = 'No cuentas con los permisos de la Camara, por favor activalos'
-                />
+            if (cameraPermissionStatus.state === 'denied'){
+                return (
+                    <ToastAlert
+                        title = 'Permisos denegados'
+                        body = 'No cuentas con los permisos de la Camara, por favor activalos'
+                    />
+                );
             }
         } catch(error) {
             console.error(error);
         }
+        return <></>
     }
 
     // ***** JSX ***** //
     return (
-        <div className = 'd-flex justify-content-center'>
-            <Container className = 'mb-5 row container align-items-center'>
-                {/* <Row> */}
-                    <Card className = 'col-sm-12 col-md-6 card'>
-                        <video ref = { videoDiv } style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></video>
-                        <Card className = 'row gap-2'>
-                            {/* <Button onClick={ startCamera }>
-                                Encender cámara
-                            </Button> */}
-                            <Button onClick={ getPhoto }>
-                                <FaCamera />Tomar foto
-                            </Button>
+        <div>
+            <div className = 'd-flex justify-content-center'>
+                <Container className = 'mb-5 row container align-items-center'>
+                    {/* <Row> */}
+                        <Card className = 'col-sm-12 col-md-6 card'>
+                            <video ref = { videoDiv } style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></video>
+                            <Card className = 'row gap-2'>
+                                {/* <Button onClick={ startCamera }>
+                                    Encender cámara
+                                </Button> */}
+                                <Button onClick={ getPhoto }>
+                                    <FaCamera />Tomar foto
+                                </Button>
+                            </Card>
                         </Card>
-                    </Card>
-                    <Card className = 'col-sm-12 col-md-6 card py-4'>
-                        <canvas ref = { photoDiv }  style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></canvas>
-                        <Card className = 'bg-danger'>
-                            <Button color='red' onClick={ closePhoto }>
-                                <FaRegWindowClose /> Cerrar
-                            </Button>
+                        <Card className = 'col-sm-12 col-md-6 card py-4'>
+                            <canvas ref = { photoDiv }  style = {{ maxWidth: '100%', maxHeight: '30rem', marginBottom : '0.5rem' }}></canvas>
+                            <Card className = 'bg-danger'>
+                                <Button color='red' onClick={ closePhoto }>
+                                    <FaRegWindowClose /> Cerrar
+                                </Button>
+                            </Card>
                         </Card>
-                    </Card>
-                {/* </Row> */}
-            </Container>
+                    {/* </Row> */}
+                </Container>
+                
+            </div>
+            { alert }
         </div>
     );
 }
